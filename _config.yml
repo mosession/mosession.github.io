@@ -1,0 +1,16 @@
+markdown: rdiscount
+permalink: /:title/
+url: http://008tv.com/
+name: Mosession's Blog
+author: Mosession
+qq: 568131867
+email: mowangzhong@yeah.net
+duoshuo: mosession
+beian: 好好学习，天天向上
+cnzz: 1000195871
+weibo: 2424746920
+github: mosession
+pygments: true
+safe: true
+paginate: 20
+about: "这里是 Mosession 的个人博客，创建于 2014 年。"

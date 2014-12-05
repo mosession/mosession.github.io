@@ -1,0 +1,213 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=06b0fe2da95a5fce3fc016ea57fa5545"></script>
+<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+
+
+<style type="text/css">
+body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;}
+
+.mask {  
+	position: absolute; top: 2px; filter: alpha(opacity=60); background-color: #777;
+	z-index: 1002; left: 0px;
+	opacity:0.5; -moz-opacity:0.5;
+}
+</style>
+
+<style type="text/css">
+/*进度条的CSS*/
+body{
+	margin:0;
+}
+#progress {
+	position:fixed;
+	height: 2px;
+	background:#b91f1f;
+	transition:opacity 500ms linear;
+	-webkit-transition:opacity 500ms linear;
+}
+#progress.done {
+	opacity:0
+}
+
+@-webkit-keyframes pulse {
+	30% {
+		opacity:.6
+	}
+	60% {
+		opacity:0;
+	}
+	100% {
+		opacity:.6
+	}
+}
+@keyframes pulse {
+	30% {
+		opacity:.6
+	}
+	60% {
+		opacity:0;
+	}
+	100% {
+		opacity:.6
+	}
+}
+#progress span {
+	z-index:1003;
+	position:absolute;
+	height:2px;
+	-webkit-box-shadow:#b91f1f 1px 0 6px 1px;
+	-ms-box-shadow:#b91f1f 1px 0 6px 1px;
+	box-shadow:#b91f1f 1px 0 6px 1px;
+	-webkit-border-radius:100%;
+	-ms-border-radius:100%;
+	border-radius:100%;
+	opacity:1;
+	width:150px;
+	right:-10px;
+	-webkit-animation:pulse 2s ease-out 0s infinite;
+	animation:pulse 2s ease-out 0s infinite;
+}
+
+
+
+</style>
+
+
+
+<title>计算驾车时间与距离</title>
+</head>
+<body>
+<div id="progress">
+	<span></span>
+</div>
+<div style=" width:100%; height:30px; margin-top:2px ; margin-left:10px">
+	请输入起点：<input type="text" id="start"/>&nbsp;
+	请输入终点:<input type="text" id="end"/>&nbsp;&nbsp;
+	<input type="button" id="btn" onclick="search()" value="开始计算"/>
+</div>
+<div style="border:1px solid red" id="result">
+
+</div>
+<div id="allmap" ></div>
+<div id="mask" class="mask"></div>
+
+</body>
+</html>
+<script type="text/javascript">
+
+// 百度地图API功能
+var map = new BMap.Map("allmap");
+map.enableScrollWheelZoom();                            //启用滚轮放大缩小
+//map.centerAndZoom(new BMap.Point(116.404, 39.915), 12);
+var output="";
+
+var searchComplete = function (results){
+
+	output="";
+	output = "从起点到终点需要";
+	if (transit.getStatus() != BMAP_STATUS_SUCCESS){
+		$("#mask").hide();
+
+		$("#progress").addClass("done");//隐藏进度条
+		alert("sorry,查询不到,请刷新重试");
+
+		return ;
+	}
+	var plan=undefined;
+	var plan = results.getPlan(0);
+
+	output += plan.getDuration(true) + "\n";                //获取时间
+	output += "总路程为：" ;
+	output += plan.getDistance(true) + "\n";             //获取距离
+	console.log(output);
+	
+//	console.log(plan.Ik[0].uu);
+//	for (var i=0; i<plan.Ik[0].uu.length;i++){
+//	output+=plan.Ik[0].uu[i].rh;
+//	}
+
+
+	$({property: 90}).animate({property: 100},{duration:1000,step:function(){$('#progress').css('width',  "100%")}});	
+	setTimeout(function(){$("#progress").addClass("done")},"1000");//隐藏进度条
+	//	setTimeout(function(){$("#result").append("</br>"+output)},"1000");
+}
+
+
+
+var transit = new BMap.DrivingRoute(map, {renderOptions: {map: map},
+		onSearchComplete: searchComplete,
+		onPolylinesSet: function(){        
+		setTimeout(function(){$("#result").append("</br>"+output)},"1000");
+
+		$("#mask").hide();
+		}});
+
+
+var mystartPoint,myendPoint;
+function search(){//点击按钮触发
+
+	showMask();//显示遮罩层
+	$({property: 0}).animate({property: 70}, {
+duration: 800,
+step: function() {
+var percentage = Math.round(this.property);
+
+
+if (percentage<80)
+{
+$('#progress').css('width',  percentage+"%");
+}else
+{
+return;
+}
+
+}//step function结束
+});
+//	if(percentage == 100) {
+//	$("#progress").addClass("done");//完成，隐藏进度条
+//	}
+//----------------------------
+
+var startCity=$("#start").val();
+var endCity=$("#end").val();
+var myGeo1=new BMap.Geocoder();
+var myGeo2=new BMap.Geocoder();
+$("#result").text("");
+myGeo1.getPoint(startCity,function(citypoint){
+		window.mystartPoint=new BMap.Point(citypoint.lng,citypoint.lat);
+		$("#result").append("</br>起点"+startCity+"的坐标为：经度"+citypoint.lng+"纬度:"+citypoint.lat);
+
+		myGeo2.getPoint(endCity,function(citypoint){
+			window.myendPoint=new BMap.Point(citypoint.lng,citypoint.lat);
+			$("#result").append("</br>终点"+ endCity+"的坐标为：经度"+citypoint.lng+"纬度:"+citypoint.lat);
+			setTimeout(transit.search( mystartPoint,myendPoint),"1000");
+			}
+			);//把myGeo2查询终点的方法放在1中强制先输出起点坐标后输出终点坐标再进行查询路线，避免了坐标没出来就查询路线，相当于强制不异步
+			$({property: 70}).animate({property: 90},{duration:1000,step:function(){$('#progress').css('width',  "90%")}});	
+			
+		}
+	);
+	//--------------------------------
+
+
+
+
+
+
+	}//search结束
+
+
+
+
+//----遮罩层-------------------------------//
+function showMask(){  
+	$("#mask").css("height",$(document).height());  
+	$("#mask").css("width",$(document).width());  
+	$("#mask").show();  
+}  
+
+</script>
+

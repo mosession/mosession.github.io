@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>❤七夕快乐❤</title>
+
+<style type="text/css">
+@font-face {
+	font-family: digit;
+	src: url('digital-7_mono.ttf') format("truetype");
+}
+</style>
+
+<link href="css/default.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/garden.js"></script>
+<script type="text/javascript" src="js/functions.js"></script>
+
+</head>
+
+<body>
+
+<div id="mainDiv">
+	<div id="content">
+		<div id="code">
+			<span class="comments">/**</span><br />
+			<span class="space"/><span class="comments">*2014—04-26</span><br />
+			<span class="comments">**/</span><br />
+			#include&#60;love.h&#62</br>
+			var Chen = <span class="keyword">new</span> Boy();<br />
+			var He = <span class="keyword">new</span> Girl();<br />
+		
+			While(Mr.Chen.School=="CQNU"&&Mrs.He.School=="CQNU"){</br>
+				<span class="comments">//One Day, They Go To The Same School </span><br />
+		
+				<span class="placeholder"/>Chen.Meet(He);</br>
+				<span class="placeholder"/>He.Meet(Chen);</br>
+						<span class="placeholder"/><span class="comments">//They Meet Each Other</span></br>
+					<span class="placeholder"/>Love(Chen,He);</br>
+				<span class="placeholder"/>if(!World.Stone=decay&||!World.Sea=Empty){<span class="comments">//只要海不枯石不烂</span></br>
+				<span class="placeholder"/>Chen.Love=Forever;</br>
+				<span class="placeholder"/>}</br>
+					}</br></br>
+			<span class="comments">	/*</span></br>
+			<span class="comments">构造函数Love</span></br>
+			<span class="comments">@parameter Boys'Name</span></br>
+			<span class="comments">@parameter Girls'Name</span></br>
+			<span class="comments">*/</span></br>
+			<span class="keyword" >Public static void</span> Love(Boy ,Girl){</br>
+			this.Boy.Lover=Gril;</br>
+			this.Gril.Lover=Boy;</br>
+			var They=Lovers(Boy,Gril);</br>
+			They.separable=False;</br>
+			They.LoveTime=Forever;</br>
+			Boy.Love(Girl)=Forever;</br>
+			Girl.Love(Boy)=Forever;</br>
+}
+			<span class="placeholder"/><span class="comments">// Whether it is right now</span><br />
+			<span class="placeholder"/><span class="comments">// Still in the distant future.</span><br />
+			<br>
+			I want to say:<br />
+			Baby, I love you forever;<br />
+		</div>
+		<div id="loveHeart">
+			<canvas id="garden"></canvas>
+			<div id="words">
+				<div id="messages">
+					亲爱的，这是我们相爱在一起的时光。
+					<div id="elapseClock"></div>
+				</div>
+				<div id="loveu">
+					不忘初心,方得始终<br/>
+					<div class="signature">- 陈宏杰</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+var offsetX = $("#loveHeart").width() / 2;
+var offsetY = $("#loveHeart").height() / 2 - 55;
+var together = new Date();
+together.setFullYear(2013, 4, 26);
+together.setHours(20);
+together.setMinutes(0);
+together.setSeconds(0);
+together.setMilliseconds(0);
+
+if (!document.createElement('canvas').getContext) {
+	var msg = document.createElement("div");
+	msg.id = "errorMsg";
+	msg.innerHTML = "你的浏览器不支持HTML5<br/>不要使用IE9以下浏览器,推荐使用 Chrome 14+/IE 9+/Firefox 7+/Safari 4+360浏览器(非IE内核模式)"; 
+	document.body.appendChild(msg);
+	$("#code").css("display", "none")
+	$("#copyright").css("position", "absolute");
+	$("#copyright").css("bottom", "10px");
+	document.execCommand("stop");
+} else {
+	setTimeout(function () {
+		startHeartAnimation();
+	}, 5000);
+
+	timeElapse(together);
+	setInterval(function () {
+		timeElapse(together);
+	}, 500);
+
+	adjustCodePosition();
+	$("#code").typewriter();
+}
+</script>
+
+</body>
+</html>
